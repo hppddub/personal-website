@@ -27,7 +27,14 @@ section {
 }
 
 .project {
-  border: 1px solid #ddd;
+  border: 0px solid #ddd;
+  padding: 18px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.experience {
+  border: 0px solid #ddd;
   padding: 18px;
   margin-bottom: 15px;
   border-radius: 8px;
