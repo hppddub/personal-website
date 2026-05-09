@@ -4,7 +4,7 @@ body {
   margin: 0 auto;
   padding: 20px 20px;
   line-height: 1.6;
-  color: #222;
+  color: #808080;
 }
 
 header {
@@ -30,14 +30,14 @@ section {
   border: 0px solid #ddd;
   padding: 18px;
   margin-bottom: 15px;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .experience {
   border: 0px solid #ddd;
   padding: 18px;
   margin-bottom: 15px;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 a:hover {
