@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Times New Roman', Times, serif;
   max-width: 850px;
   margin: 0 auto;
   padding: 20px 20px;
@@ -20,13 +20,13 @@ h1 {
 
 h2 {
   margin-bottom: 5px;
-  color: #000000;
+  color: #404040;
   font-size: 16px;
 }
 
 nav a {
   margin-right: 15px;
-  color: #808080;
+  color: #404040;
   text-decoration: none;
 }
 
