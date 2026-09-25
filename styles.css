@@ -3,9 +3,9 @@ body {
   max-width: 850px;
   margin: 0 auto;
   padding: 20px 20px;
-  line-height: 1.6;
-  color: #444444;
-  font-size: 16px;
+  line-height: 1.35;
+  color: #555555;
+  font-size: 14px;
 }
 
 header {
@@ -17,13 +17,19 @@ header {
 h1 {
   margin-bottom: 5px;
   color: #000000;
-  font-size: 18px;
+  font-size: 14px;
+  font-weight: normal;
 }
 
 h2 {
   margin-bottom: 5px;
-  color: #404040;
-  font-size: 16px;
+  color: #111111;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+p {
+  margin: 4px 0;
 }
 
 nav a {
