@@ -1,5 +1,5 @@
 body {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Courier New', Courier, monospace;
   max-width: 850px;
   margin: 0 auto;
   padding: 20px 20px;
@@ -9,7 +9,9 @@ body {
 }
 
 header {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
 }
 
 h1 {
@@ -31,7 +33,13 @@ nav a {
 }
 
 section {
-  margin-bottom: 45px;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+section:last-child {
+  border-bottom: none;
 }
 
 .project {
