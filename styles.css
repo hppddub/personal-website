@@ -4,26 +4,27 @@ body {
   margin: 0 auto;
   padding: 20px 20px;
   line-height: 1.35;
-  color: #555555;
+  color: #b0b0b0;
+  background-color: #121212;
   font-size: 14px;
 }
 
 header {
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #333;
 }
 
 h1 {
   margin-bottom: 5px;
-  color: #000000;
+  color: #ffffff;
   font-size: 14px;
   font-weight: normal;
 }
 
 h2 {
   margin-bottom: 5px;
-  color: #111111;
+  color: #eeeeee;
   font-size: 14px;
   font-weight: normal;
 }
@@ -34,14 +35,14 @@ p {
 
 nav a {
   margin-right: 15px;
-  color: #404040;
+  color: #c8c8c8;
   text-decoration: none;
 }
 
 section {
   margin-bottom: 30px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #333;
 }
 
 section:last-child {
@@ -49,14 +50,14 @@ section:last-child {
 }
 
 .project {
-  border: 0px solid #ddd;
+  border: 0px solid #333;
   padding: 18px;
   margin-bottom: 15px;
   border-radius: 12px;
 }
 
 .experience {
-  border: 0px solid #ddd;
+  border: 0px solid #333;
   padding: 18px;
   margin-bottom: 15px;
   border-radius: 12px;
@@ -64,4 +65,12 @@ section:last-child {
 
 a:hover {
   text-decoration: underline;
+}
+
+a {
+  color: #8ab4f8;
+}
+
+a:visited {
+  color: #c58af9;
 }
