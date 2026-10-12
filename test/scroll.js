@@ -21,9 +21,12 @@
     hint.hidden = false;
   }
 
-  var THRESHOLD = 250; // px of extra scrolling needed at an edge
-  var DWELL = 350;     // ms the page must rest at an edge before counting
-  var push = 0, edge = null, edgeSince = 0, leaving = false;
+  // one scroll gesture = a burst of wheel events with no pause longer than GAP.
+  // a gesture that starts at the edge moves to the next/previous page; a gesture
+  // that only reaches the edge (e.g. scrolling down to the bottom) never does.
+  var GAP = 200;      // ms of quiet that ends a gesture (covers trackpad momentum)
+  var NUDGE = 30;     // px of scrolling to ignore, so tiny trackpad touches don't count
+  var lastWheel = 0, gestureEdge = null, push = 0, leaving = false;
 
   function atBottom() {
     return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
@@ -36,18 +39,21 @@
     location.href = url;
   }
 
-  function overscroll(dy) {
-    var e = dy > 0 && atBottom() ? 'bottom' : dy < 0 && atTop() ? 'top' : null;
+  window.addEventListener('wheel', function (ev) {
+    var dy = ev.deltaMode === 1 ? ev.deltaY * 16 : ev.deltaY; // firefox reports lines
+    if (!dy) return;
     var now = Date.now();
-    if (e !== edge) { edge = e; edgeSince = now; push = 0; }
-    if (!e || now - edgeSince < DWELL) return;
+    if (now - lastWheel > GAP) {
+      gestureEdge = dy > 0 && atBottom() ? 'bottom' : dy < 0 && atTop() ? 'top' : null;
+      push = 0;
+    }
+    lastWheel = now;
+    if (!gestureEdge || (gestureEdge === 'bottom') !== (dy > 0)) return;
     push += Math.abs(dy);
-    if (push < THRESHOLD) return;
-    if (e === 'bottom') go(next);
+    if (push < NUDGE) return;
+    if (gestureEdge === 'bottom') go(next);
     else if (prev) go(prev + '#end');
-  }
-
-  window.addEventListener('wheel', function (ev) { overscroll(ev.deltaY); }, { passive: true });
+  }, { passive: true });
 
   var touchY = null, touchEdge = null;
   window.addEventListener('touchstart', function (ev) {
