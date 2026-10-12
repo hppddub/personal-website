@@ -1,7 +1,7 @@
 // keep scrolling past the end of a page to go to the next section,
 // or past the top to go back to the previous one.
 (function () {
-  var links = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="/test/"]'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a:not([target])'));
   var pages = links.map(function (a) { return a.getAttribute('href'); });
   var i = links.findIndex(function (a) { return a.getAttribute('aria-current') === 'page'; });
   if (i < 0) return;
