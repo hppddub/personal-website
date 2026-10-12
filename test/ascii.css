@@ -73,6 +73,7 @@ h2::before { content: "> "; color: #777; }
 
 p { margin: 4px 0; }
 
+.block,
 .education,
 .experience,
 .project {
@@ -80,6 +81,7 @@ p { margin: 4px 0; }
   margin-bottom: 18px;
   position: relative;
 }
+.block::before,
 .education::before,
 .experience::before,
 .project::before {
@@ -105,6 +107,11 @@ p.bullet::before { content: "> "; color: #777; }
 a { color: #fff; }
 a:visited { color: #bbb; }
 a:hover { background: #fff; color: #000; text-decoration: none; }
+
+.next-hint {
+  color: #555;
+  margin: 24px 0 0;
+}
 
 footer {
   color: #555;
