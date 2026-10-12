@@ -55,6 +55,17 @@
     else if (prev) go(prev + '#end');
   }, { passive: true });
 
+  // arrow keys: down/right go to the next section, up/left go back
+  window.addEventListener('keydown', function (ev) {
+    if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) return;
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowRight') {
+      if (next) { ev.preventDefault(); go(next); }
+    } else if (ev.key === 'ArrowUp' || ev.key === 'ArrowLeft') {
+      if (prev) { ev.preventDefault(); go(prev); }
+    }
+  });
+
   var touchY = null, touchEdge = null;
   window.addEventListener('touchstart', function (ev) {
     touchY = ev.touches[0].clientY;

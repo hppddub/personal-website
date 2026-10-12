@@ -63,6 +63,11 @@ h1 {
   margin-bottom: 14px;
 }
 h1::before { content: "==[ "; color: #777; }
+/* each section's tab sits two "=" further right than the one before */
+#education h1::before { content: "====[ "; }
+#experience h1::before { content: "======[ "; }
+#projects h1::before { content: "========[ "; }
+#contact h1::before { content: "==========[ "; }
 h1::after {
   content: " ]======================================================================================================================================";
   color: #777;
