@@ -23,7 +23,6 @@ pre.banner {
   overflow: hidden;
 }
 
-header p { margin: 4px 0 12px; }
 
 nav a {
   display: inline-block;
@@ -74,12 +73,14 @@ h2::before { content: "> "; color: #777; }
 
 p { margin: 4px 0; }
 
+.education,
 .experience,
 .project {
   padding: 4px 0 4px 18px;
   margin-bottom: 18px;
   position: relative;
 }
+.education::before,
 .experience::before,
 .project::before {
   content: "|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|";
@@ -93,7 +94,13 @@ p { margin: 4px 0; }
   line-height: 1.35;
 }
 
-.date { color: #888; }
+p.bullet {
+  padding-left: 4ch;
+  text-indent: -2ch;
+}
+p.bullet::before { content: "> "; color: #777; }
+
+.date { color: #888; padding-left: 2ch; }
 
 a { color: #fff; }
 a:visited { color: #bbb; }
