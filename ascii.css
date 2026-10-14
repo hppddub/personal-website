@@ -16,15 +16,18 @@ body {
 ::selection { background: #fff; color: #000; }
 
 pre.banner {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   color: #fff;
-  /* 76 columns wide: shrink with the viewport so it never clips */
-  font-size: clamp(4px, calc((100vw - 32px) / 46), 13px);
-  line-height: 1;
+  font-size: 14px;
+  line-height: 1.1;
   overflow: hidden;
 }
-/* the drop-shadow layer behind the filled letters */
-pre.banner .s { color: #444; }
+/* outline fades from white to gray going down, over a dark offset echo */
+pre.banner .r0, pre.banner .r1 { color: #fff; }
+pre.banner .r2 { color: #ddd; }
+pre.banner .r3 { color: #b4b4b4; }
+pre.banner .r4 { color: #8c8c8c; }
+pre.banner .s { color: #2b2b2b; }
 
 
 nav a {
@@ -127,6 +130,10 @@ footer {
   overflow: hidden;
   margin-top: 30px;
   user-select: none;
+}
+
+@media (max-width: 480px) {
+  pre.banner { font-size: 10px; }
 }
 
 a.home,
