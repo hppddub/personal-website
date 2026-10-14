@@ -9,7 +9,7 @@ body {
   padding: 20px 16px;
   line-height: 1.35;
   color: #d0d0d0;
-  background: #000;
+  background: transparent;
   font-size: 14px;
 }
 
@@ -140,3 +140,13 @@ a, a *, button, [role="button"], label, summary { cursor: url("/cursor-pointer.s
 html.cursor-alt, html.cursor-alt body { cursor: url("/cursor-2.svg") 1 1, default; }
 html.cursor-alt a, html.cursor-alt a *, html.cursor-alt button, html.cursor-alt [role="button"],
 html.cursor-alt label, html.cursor-alt summary { cursor: url("/cursor-pointer-2.svg") 6 1, pointer; }
+
+/* drifting ascii splotches behind everything, drawn by backdrop.js */
+canvas.backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
