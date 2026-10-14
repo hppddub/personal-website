@@ -113,6 +113,9 @@ p.bullet {
 }
 p.bullet::before { content: "> "; color: #777; }
 
+p.bullet.sub { padding-left: 8ch; }
+p.bullet.sub::before { content: "- "; }
+
 .date { color: #888; padding-left: 2ch; }
 
 a { color: #fff; }
