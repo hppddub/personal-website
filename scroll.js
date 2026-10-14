@@ -9,11 +9,32 @@
   var prev = i > 0 ? pages[i - 1] : null;
   var next = i < pages.length - 1 ? pages[i + 1] : null;
 
-  // arriving from the next page going backwards: start at the bottom
-  if (location.hash === '#end') {
-    history.replaceState(null, '', location.pathname);
-    window.scrollTo(0, document.documentElement.scrollHeight);
+  // load the other sections in the background so switching is instant.
+  // chrome/edge prerender them; other browsers at least get them cached.
+  var others = pages.filter(function (p, j) { return j !== i; });
+  if (HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
+    var rules = document.createElement('script');
+    rules.type = 'speculationrules';
+    rules.textContent = JSON.stringify({ prerender: [{ source: 'list', urls: others, eagerness: 'eager' }] });
+    document.head.appendChild(rules);
+  } else {
+    others.forEach(function (p) {
+      var link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = p;
+      document.head.appendChild(link);
+    });
   }
+
+  // arriving from the next page going backwards: start at the bottom.
+  // a flag rather than a #hash, so the prerendered page still gets used.
+  function arrive() {
+    var end = false;
+    try { end = sessionStorage.getItem('scroll-to-end') === location.pathname.replace(/\/$/, ''); sessionStorage.removeItem('scroll-to-end'); } catch (e) {}
+    if (end) window.scrollTo(0, document.documentElement.scrollHeight);
+  }
+  if (document.prerendering) document.addEventListener('prerenderingchange', arrive, { once: true });
+  else arrive();
 
   var hint = document.querySelector('.next-hint');
   if (hint && next) {
@@ -33,9 +54,13 @@
   }
   function atTop() { return window.scrollY <= 0; }
 
-  function go(url) {
+  // coming back via the back button restores this page as it was, mid-"leaving"
+  window.addEventListener('pageshow', function () { leaving = false; });
+
+  function go(url, toEnd) {
     if (leaving || !url) return;
     leaving = true;
+    if (toEnd) try { sessionStorage.setItem('scroll-to-end', url); } catch (e) {}
     location.href = url;
   }
 
@@ -52,7 +77,7 @@
     push += Math.abs(dy);
     if (push < NUDGE) return;
     if (gestureEdge === 'bottom') go(next);
-    else if (prev) go(prev + '#end');
+    else if (prev) go(prev, true);
   }, { passive: true });
 
   // arrow keys: down/right go to the next section, up/left go back
@@ -75,7 +100,7 @@
     if (touchY === null || !touchEdge) return;
     var dy = touchY - ev.changedTouches[0].clientY; // > 0 means swiped up
     if (touchEdge === 'bottom' && dy > 120 && atBottom()) go(next);
-    else if (touchEdge === 'top' && dy < -120 && atTop() && prev) go(prev + '#end');
+    else if (touchEdge === 'top' && dy < -120 && atTop() && prev) go(prev, true);
     touchY = null;
   }, { passive: true });
 })();

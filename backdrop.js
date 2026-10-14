@@ -13,9 +13,18 @@
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // smooth value noise over a lattice of random values
+  // fixed seed + wall-clock time, so every page draws the same frame and the
+  // backdrop carries on uninterrupted when you switch pages
+  var seed = 1337;
+  function rand() {
+    seed = (seed + 0x6D2B79F5) | 0;
+    var x = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  }
   var perm = new Uint8Array(512), vals = new Float32Array(256);
-  for (var i = 0; i < 256; i++) { perm[i] = i; vals[i] = Math.random(); }
-  for (i = 255; i > 0; i--) { var j = (Math.random() * (i + 1)) | 0, t = perm[i]; perm[i] = perm[j]; perm[j] = t; }
+  for (var i = 0; i < 256; i++) { perm[i] = i; vals[i] = rand(); }
+  for (i = 255; i > 0; i--) { var j = (rand() * (i + 1)) | 0, t = perm[i]; perm[i] = perm[j]; perm[j] = t; }
   for (i = 0; i < 256; i++) perm[i + 256] = perm[i];
   function lat(x, y, z) { return vals[perm[perm[perm[x & 255] + (y & 255)] + (z & 255)]]; }
   function fade(t) { return t * t * (3 - 2 * t); }
@@ -40,11 +49,11 @@
     cw = ctx.measureText('M').width;
     cols = Math.ceil(innerWidth / cw);
     rows = Math.ceil(innerHeight / LINE);
-    draw(performance.now());
+    draw();
   }
 
-  function draw(now) {
-    var t = now / 1000;
+  function draw() {
+    var t = (Date.now() % 1e8) / 1000;
     ctx.clearRect(0, 0, innerWidth, innerHeight);
     // build one string per row per shade, so each row is a few fillText calls
     for (var r = 0; r < rows; r++) {
@@ -76,7 +85,7 @@
 
   var last = 0;
   function loop(now) {
-    if (now - last >= 1000 / FPS) { last = now; draw(now); }
+    if (now - last >= 1000 / FPS) { last = now; draw(); }
     requestAnimationFrame(loop);
   }
 
