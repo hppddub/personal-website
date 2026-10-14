@@ -132,3 +132,7 @@ footer {
 
 a.home,
 a.home:hover { background: none; color: inherit; text-decoration: none; }
+
+/* pixel-art cursors */
+html, body { cursor: url("/cursor.svg") 0 0, default; }
+a, a *, button, [role="button"], label, summary { cursor: url("/cursor-pointer.svg") 11 1, pointer; }
