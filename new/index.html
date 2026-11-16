@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stanley zhou</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    html { background: #02040a; }
+    body {
+      background: radial-gradient(ellipse 80% 70% at 50% 40%, #08101d 0%, #040810 55%, #02040a 100%);
+      cursor: url("/cursor.svg") 1 1, default;
+    }
+    html.cursor-alt body { cursor: url("/cursor-2.svg") 1 1, default; }
+    canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+    /* far jellyfish: out of focus */
+    #bg { filter: blur(1.6px); opacity: 0.55; }
+    /* soft bloom under the crisp layer, a blurred copy of it */
+    #glow { filter: blur(6px) saturate(1.4); opacity: 0.85; mix-blend-mode: screen; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  </style>
+</head>
+<body>
+  <h1 class="sr">stanley zhou</h1>
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <canvas id="glow" aria-hidden="true"></canvas>
+  <canvas id="fg" aria-hidden="true"></canvas>
+  <script src="/new/jelly.js"></script>
+  <script src="/cursor.js"></script>
+</body>
+</html>
