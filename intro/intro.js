@@ -591,14 +591,8 @@ class View {
 const root = document.documentElement;
 let TARGETS = [];
 
-function addReplay() {
-  const f = document.querySelector('footer');
-  if (!f || f.querySelector('.replay')) return;
-  const a = document.createElement('a'); a.href = '/?intro'; a.className = 'replay'; a.textContent = 'replay intro';
-  f.append('  ·  ', a);
-}
 if (!root.classList.contains('v2')) return;
-if (!root.classList.contains('intro')) { addReplay(); return; }
+if (!root.classList.contains('intro')) return;
 window.__introStarted = true;
 
 function luminance(c) { const m = c.match(/[\d.]+/g); if (!m) return 0.7; return (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255; }
@@ -651,7 +645,7 @@ function finish() {
   root.style.setProperty('--intro-o', '1');
   cv.style.transition = 'opacity .6s'; cv.style.opacity = '0';
   sc.remove(); skip.remove(); hint.remove();
-  setTimeout(() => { root.classList.remove('intro'); root.style.removeProperty('--intro-o'); cv.remove(); addReplay(); }, 650);
+  setTimeout(() => { root.classList.remove('intro'); root.style.removeProperty('--intro-o'); cv.remove(); }, 650);
 }
 skip.addEventListener('click', finish);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') finish(); });

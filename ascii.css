@@ -190,7 +190,10 @@ html.v2 a:visited { color: #b5d6ef; }
 html.v2 a:hover { background: #cfe9ff; color: #000; }
 html.v2 .next-hint, html.v2 footer { color: #3a5266; }
 html.v2 footer { white-space: normal; }
-html.v2 footer a.replay { color: #5e7f99; }
+/* replay link: only on v2; stanleyzhou.cv never shows it */
+footer .replay { display: none; }
+html.v2 footer .replay { display: inline; }
+html.v2 footer .replay a { color: #5e7f99; }
 
 /* the intro (v2 home page only): the page stays laid out underneath, hidden, until the montage lands on it */
 html.intro { overflow: hidden; }
