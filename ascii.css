@@ -276,14 +276,14 @@ html.win-min .win-status, html.win-min .win-foot { background: transparent; }
 .win-status-in.win-fade { opacity: 0; }
 .win-status-in .next-hint, .win-status-in footer { margin: 0; }
 
-/* the little jellyfish pointing at [_] (until it has been used once) */
+/* the little jellyfish pointing at [_] */
 .win-tip { position: absolute; z-index: 3; display: flex; align-items: flex-start; pointer-events: none; user-select: none; }
 .win-tip pre { margin: 0; font-size: 10px; line-height: 1.15; }
 .win-tip-arrow { color: #5e7f99; }
 .win-tip-jelly { color: #bfe2ff; animation: win-bob 1.8s ease-in-out infinite; }
 @keyframes win-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @media (prefers-reduced-motion: reduce) { .win-tip-jelly { animation: none; } }
-html:not(.win-max) .win-tip, html.win-tried .win-tip { display: none; }
+html:not(.win-max) .win-tip { display: none; }
 
 /* contrast: labels and the about lines read in near-white, with the ice kept for markers and detail */
 html.v2 #contact .label { color: #ffffff; }

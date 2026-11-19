@@ -50,7 +50,7 @@
   kids.forEach(function (n) { body.appendChild(n); });
   dockStatus();
 
-  // a little jellyfish under the corner, pointing up at [_], until the visitor has tried it once
+  // a little jellyfish under the corner, pointing up at [_]
   // the arrow stays put under [_]; the jellyfish beside it bobs (css), wiggles and blinks (frames below)
   var ARROW = ['       ^', '       |', "  -----'", ' try me'];
   var FACE = ['( ^_^ )', '( ^_^ )', '( ^_^ )', '( -_- )'];
@@ -60,16 +60,14 @@
   function drawJelly() { jelly.textContent = ['', ' .-"-.', FACE[tipFrame % FACE.length], LEGS[tipFrame % 2]].join('\n'); }
   drawJelly();
   tip.append(jelly, arrow); win.appendChild(tip);
-  function tried() { try { return localStorage.getItem('sz-win-tried') === '1'; } catch (e) { return false; } }
-  if (tried()) root.classList.add('win-tried');
   function placeTip() {
-    if (st.s !== 'max' || root.classList.contains('win-tried')) return;
+    if (st.s !== 'max') return;
     var w = win.getBoundingClientRect(), b = bMin.getBoundingClientRect(), cw = arrow.getBoundingClientRect().width / ARROW[0].length;
     tip.style.right = (w.right - (b.left + b.width / 2) - cw / 2) + 'px';
     tip.style.top = (b.bottom - w.top + 1) + 'px';
   }
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(function () {
-    if (st.s !== 'max' || root.classList.contains('win-tried')) return;
+    if (st.s !== 'max') return;
     tipFrame = (tipFrame + 1) % 8; drawJelly();
   }, 450);
   addEventListener('resize', placeTip);
@@ -119,8 +117,6 @@
   function set(s) { st.s = s; save(); apply(true); if (s === 'max') window.scrollTo(0, 0); }
 
   bMin.addEventListener('click', function () {
-    try { localStorage.setItem('sz-win-tried', '1'); } catch (e) {}
-    root.classList.add('win-tried');
     set('min');
   });
   bMax.addEventListener('click', function () { set('max'); });
