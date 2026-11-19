@@ -605,7 +605,7 @@ function measureTargets() {
     let n;
     while ((n = walker.nextNode())) {
       const el = n.parentElement, cs = getComputedStyle(el);
-      if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('[hidden]')) continue;
+      if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('[hidden]') || el.closest('main h1')) continue;
       const fs = parseFloat(cs.fontSize), lum = luminance(cs.color), txt = n.textContent;
       for (let i = 0; i < txt.length; i++) {
         const ch = txt[i], code = ch.charCodeAt(0);

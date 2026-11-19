@@ -167,7 +167,7 @@ canvas.backdrop { view-transition-name: backdrop; }
 ::view-transition-group(*) { animation-duration: 0.18s; }
 
 /* ---------------------------------------------------------------------------
-   v2: stanleyzhou.vercel.app (stanleyzhou.cv keeps everything above as is).
+   v2: the live site on every domain (the rules above are the original look it builds on).
    full-width terminal in one ice hue, matching the intro montage.
    ------------------------------------------------------------------------ */
 html.v2 { background: #050608; }
@@ -182,6 +182,10 @@ html.v2 nav a { color: #8fb8d8; }
 html.v2 nav a:hover, html.v2 nav a[aria-current="page"] { background: #cfe9ff; color: #000; }
 html.v2 .rule { color: #3a5266; }
 html.v2 h1, html.v2 h2 { color: #e6f4ff; }
+/* no ==[ section ]== bars: the window title and the highlighted nav item already say where you are.
+   the heading stays in the page for screen readers. */
+html.v2 main h1 { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+html.v2 main h1::before, html.v2 main h1::after { content: none; }
 html.v2 h1::before, html.v2 h1::after, html.v2 h2::before, html.v2 p.bullet::before { color: #5e7f99; }
 html.v2 .block::before, html.v2 .education::before, html.v2 .experience::before, html.v2 .project::before { color: #3a5266; }
 html.v2 .date { color: #6a8ba5; }
@@ -190,7 +194,7 @@ html.v2 a:visited { color: #b5d6ef; }
 html.v2 a:hover { background: #cfe9ff; color: #000; }
 html.v2 .next-hint, html.v2 footer { color: #3a5266; }
 html.v2 footer { white-space: normal; }
-/* replay link: only on v2; stanleyzhou.cv never shows it */
+/* replay link: only on v2 */
 footer .replay { display: none; }
 html.v2 footer .replay { display: inline; }
 html.v2 footer .replay a { color: #5e7f99; }
@@ -208,7 +212,7 @@ html.intro body > *:not(.intro-ui) { opacity: var(--intro-o, 0); }
 .intro-skip:hover, .intro-skip:focus-visible { background: #cfe9ff; color: #000; outline: none; }
 .intro-hint { position: fixed; z-index: 21; left: 50%; bottom: 18px; transform: translateX(-50%); color: #5e7f99; pointer-events: none; transition: opacity .4s; }
 
-/* the ascii window (v2 only, built by window.js) ---------------------------------------- */
+/* the ascii window (built by window.js) ---------------------------------------- */
 html.v2 body { padding: 10px 12px; }
 .win { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: calc(100vh - 20px); }
 .win-bar, .win-foot { display: flex; align-items: baseline; white-space: nowrap; color: #3a5266; user-select: none; }
@@ -227,7 +231,8 @@ html.win-max .win-btn.win-max, html.win-min .win-btn.win-min { display: none; }
 .win-mid { display: flex; flex: 1; min-height: 0; }
 .win-side { position: relative; flex: none; width: 1ch; overflow: hidden; white-space: pre; color: #3a5266; user-select: none; }
 .win-side::before { position: absolute; top: 0; left: 0; content: "|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A"; }
-.win-body { flex: 1; min-width: 0; padding: 10px 16px 14px; }
+.win-body { flex: 1; min-width: 0; padding: 10px 16px 14px; transition: opacity 0.14s ease; }
+.win-body.win-fade { opacity: 0; }
 
 /* minimized: a floating window over the wallpaper */
 html.win-min body, html.win-closed body { overflow: hidden; }

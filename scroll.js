@@ -1,13 +1,23 @@
 // keep scrolling past the end of a page to go to the next section,
 // or past the top to go back to the previous one.
 (function () {
-  var links = Array.prototype.slice.call(document.querySelectorAll('nav a:not([target])'));
-  var pages = links.map(function (a) { return a.getAttribute('href'); });
-  var i = links.findIndex(function (a) { return a.getAttribute('aria-current') === 'page'; });
+  var links, pages, i, prev, next;
+  // work out where we are from the nav; window.js calls this again after swapping a section in place
+  function refresh() {
+    links = Array.prototype.slice.call(document.querySelectorAll('nav a:not([target])'));
+    pages = links.map(function (a) { return a.getAttribute('href'); });
+    i = links.findIndex(function (a) { return a.getAttribute('aria-current') === 'page'; });
+    prev = i > 0 ? pages[i - 1] : null;
+    next = i >= 0 && i < pages.length - 1 ? pages[i + 1] : null;
+    var hint = document.querySelector('.next-hint');
+    if (hint) {
+      hint.hidden = !next;
+      if (next) hint.textContent = 'v keep scrolling: ' + links[i + 1].textContent + ' v';
+    }
+  }
+  refresh();
+  window.__scrollNavRefresh = refresh;
   if (i < 0) return;
-
-  var prev = i > 0 ? pages[i - 1] : null;
-  var next = i < pages.length - 1 ? pages[i + 1] : null;
 
   // load the other sections in the background so switching is instant.
   // chrome/edge prerender them; other browsers at least get them cached.
@@ -35,12 +45,6 @@
   }
   if (document.prerendering) document.addEventListener('prerenderingchange', arrive, { once: true });
   else arrive();
-
-  var hint = document.querySelector('.next-hint');
-  if (hint && next) {
-    hint.textContent = 'v keep scrolling: ' + links[i + 1].textContent + ' v';
-    hint.hidden = false;
-  }
 
   // one scroll gesture = a burst of wheel events with no pause longer than GAP.
   // a gesture that starts at the edge moves to the next/previous page; a gesture

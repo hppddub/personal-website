@@ -1,8 +1,9 @@
-// v2 only (stanleyzhou.cv never runs this): the page lives inside an ascii window.
+// the page lives inside an ascii window.
 //   [_]  shrinks it to a small window you can drag by the title bar and resize from the corner
 //   [^]  maximizes it again (double-clicking the title bar toggles too)
 //   [x]  closes it, leaving the jellyfish wallpaper and a button in the corner to reopen it
-// the state carries across pages for the rest of the visit.
+// the state carries across pages for the rest of the visit. while the window is small, moving
+// between sections swaps the window's content in place, so the wallpaper keeps swimming.
 (function () {
   var root = document.documentElement;
   if (!root.classList.contains('v2')) return;
@@ -110,6 +111,43 @@
     if (Math.abs(r.width - st.w) > 1 || Math.abs(r.height - st.h) > 1) { st.w = Math.round(r.width); st.h = Math.round(r.height); save(); }
   }).observe(win);
   addEventListener('resize', function () { if (st.s === 'min') apply(false); });
+
+  // ---- while minimized, moving between sections swaps the window's content in place
+  var SECTION = /^\/(about|education|experiences|projects|contact)?\/?$/;
+  var swapping = 0;
+  function pageContent(doc) {
+    return Array.prototype.slice.call(doc.body.children).filter(function (n) {
+      return n.tagName !== 'SCRIPT' && !n.classList.contains('backdrop') && !n.classList.contains('intro-ui');
+    });
+  }
+  function swap(url, push) {
+    var token = ++swapping;
+    body.classList.add('win-fade');
+    var faded = new Promise(function (r) { setTimeout(r, 140); });
+    var page = fetch(url, { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); });
+    Promise.all([page, faded]).then(function (res) {
+      if (token !== swapping) return;
+      var doc = new DOMParser().parseFromString(res[0], 'text/html'), nodes = pageContent(doc);
+      if (!nodes.length) throw new Error('empty page');
+      body.replaceChildren.apply(body, nodes.map(function (n) { return document.importNode(n, true); }));
+      if (push) history.pushState({ win: 1 }, '', url);
+      document.title = doc.title;
+      seg = location.pathname.replace(/\/+$/, '').split('/').pop() || 'about';
+      title.textContent = '~/' + seg; dock.textContent = '[ ~/' + seg + ' ]';
+      body.scrollTop = 0;
+      if (window.__scrollNavRefresh) window.__scrollNavRefresh();
+      requestAnimationFrame(function () { body.classList.remove('win-fade'); });
+    }).catch(function () { location.href = url; });
+  }
+  document.addEventListener('click', function (e) {
+    if (st.s !== 'min' || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || a.target || a.origin !== location.origin || a.search || !SECTION.test(a.pathname)) return;
+    e.preventDefault();
+    if (a.pathname.replace(/\/+$/, '') === location.pathname.replace(/\/+$/, '')) return;
+    swap(a.href, true);
+  });
+  addEventListener('popstate', function () { if (st.s === 'min') swap(location.href, false); else location.reload(); });
 
   // pages can be prerendered or restored from the back/forward cache: pick up the latest state then
   document.addEventListener('prerenderingchange', function () { load(); apply(false); });
