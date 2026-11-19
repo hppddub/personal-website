@@ -300,3 +300,16 @@ html.v2 nav a { flex: none; margin: 0 0 4px; }
 html.v2 pre.banner { font-size: clamp(6px, 3.3cqi, 14px); }
 /* on phone-width screens the banner fills the top row, so the corner jellyfish would sit on the name */
 @media (max-width: 700px) { .win-tip { display: none !important; } }
+/* the tiny words the corner jellyfish puffs out as it bobs */
+.win-tip-word {
+  position: absolute; font-size: 8px; line-height: 1; color: #6f93ae; white-space: nowrap; pointer-events: none;
+  animation: win-word 1.3s ease-out forwards;
+}
+.win-tip-word.l { translate: -100% 0; }
+@keyframes win-word {
+  0% { opacity: 0; transform: translate(0, 0); }
+  20% { opacity: 0.85; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)); }
+}
+.win-tip-jelly { pointer-events: auto; cursor: url("/cursor-pointer.svg") 6 1, pointer; }
+html.cursor-alt .win-tip-jelly { cursor: url("/cursor-pointer-2.svg") 6 1, pointer; }

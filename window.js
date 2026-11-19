@@ -70,6 +70,22 @@
     if (st.s !== 'max') return;
     tipFrame = (tipFrame + 1) % 8; drawJelly();
   }, 450);
+  // every bob (the css animation restarting) puffs a tiny word out of a random side
+  var SOUNDS = ['bloop', 'gloop', 'schloop', 'blub', 'plip'];
+  var SIDES = [ // start x, start y, drift x, drift y, leftward (anchor the word by its right edge)
+    [-2, 22, -14, -4, 1], [0, 40, -12, 10, 1], [10, 48, 0, 14, 0], [34, 44, 12, 10, 0], [0, 6, -12, -8, 1]
+  ];
+  function puff() {
+    if (st.s !== 'max') return;
+    var s = SIDES[(Math.random() * SIDES.length) | 0], w = el('span', 'win-tip-word' + (s[4] ? ' l' : ''), SOUNDS[(Math.random() * SOUNDS.length) | 0]);
+    w.style.left = s[0] + 'px'; w.style.top = s[1] + 'px';
+    w.style.setProperty('--dx', s[2] + 'px'); w.style.setProperty('--dy', s[3] + 'px');
+    w.addEventListener('animationend', function () { w.remove(); });
+    tip.appendChild(w);
+  }
+  jelly.addEventListener('animationiteration', puff);
+  // and clicking the jellyfish makes it bloop too
+  jelly.addEventListener('click', puff);
   addEventListener('resize', placeTip);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeTip);
   var firstScript = document.body.querySelector('script');
