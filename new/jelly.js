@@ -6,6 +6,8 @@
 
   var TAU = Math.PI * 2;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // wallpaper mode (window.js on v2 pages): one ice hue, no frame, paused while the window covers it
+  var WALL = !!window.JELLY_WALLPAPER;
   var FAMILY = "ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'Courier New', monospace";
   var SIM_DT = 1 / 30;
 
@@ -34,6 +36,7 @@
 
   var colorCache = new Map();
   function hsl(h, s, l) {
+    if (WALL) { h = 205; s = s * 0.5; }
     h = ((Math.round(h / 3) * 3) % 360 + 360) % 360;
     s = clamp(Math.round(s / 5) * 5, 0, 100);
     l = clamp(Math.round(l / 2) * 2, 0, 100);
@@ -585,7 +588,7 @@
     }
     for (i = 0; i < far.length; i++) far[i].render(bgGrid, t);
     main.render(fgGrid, t);
-    drawBorder(fgGrid, lastLetters);
+    if (!WALL) drawBorder(fgGrid, lastLetters);
 
     bgGrid.draw(bgX);
     lastLetters = fgGrid.draw(fgX);
@@ -596,6 +599,7 @@
 
   var acc = 0, prev = 0;
   function loop(now) {
+    if (WALL && window.__jellyPaused) { prev = now; requestAnimationFrame(loop); return; }
     var dt = Math.min(0.25, (now - prev) / 1000 || 0);
     prev = now;
     acc += dt;

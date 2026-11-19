@@ -171,7 +171,7 @@ canvas.backdrop { view-transition-name: backdrop; }
    full-width terminal in one ice hue, matching the intro montage.
    ------------------------------------------------------------------------ */
 html.v2 { background: #050608; }
-html.v2 body { max-width: none; padding: 20px 28px; color: #8fb8d8; }
+html.v2 body { max-width: none; color: #8fb8d8; }
 html.v2 ::selection { background: #cfe9ff; color: #000; }
 html.v2 pre.banner .r0, html.v2 pre.banner .r1 { color: #e6f4ff; }
 html.v2 pre.banner .r2 { color: #bfe2ff; }
@@ -207,3 +207,55 @@ html.intro body > *:not(.intro-ui) { opacity: var(--intro-o, 0); }
 }
 .intro-skip:hover, .intro-skip:focus-visible { background: #cfe9ff; color: #000; outline: none; }
 .intro-hint { position: fixed; z-index: 21; left: 50%; bottom: 18px; transform: translateX(-50%); color: #5e7f99; pointer-events: none; transition: opacity .4s; }
+
+/* the ascii window (v2 only, built by window.js) ---------------------------------------- */
+html.v2 body { padding: 10px 12px; }
+.win { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: calc(100vh - 20px); }
+.win-bar, .win-foot { display: flex; align-items: baseline; white-space: nowrap; color: #3a5266; user-select: none; }
+.win-bar { position: sticky; top: 0; z-index: 2; background: #050608; }
+.win-title { color: #e6f4ff; }
+.win-fill { flex: 1; min-width: 2ch; overflow: hidden; }
+.win-fill::before { content: "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"; }
+.win-btn {
+  font: inherit; color: #8fb8d8; background: none; border: 0; padding: 0; margin-left: 1ch;
+  cursor: url("/cursor-pointer.svg") 6 1, pointer;
+}
+html.cursor-alt .win-btn { cursor: url("/cursor-pointer-2.svg") 6 1, pointer; }
+.win-btn:hover, .win-btn:focus-visible { background: #cfe9ff; color: #000; outline: none; }
+.win-btn.win-x:hover { background: #e6f4ff; }
+html.win-max .win-btn.win-max, html.win-min .win-btn.win-min { display: none; }
+.win-mid { display: flex; flex: 1; min-height: 0; }
+.win-side { position: relative; flex: none; width: 1ch; overflow: hidden; white-space: pre; color: #3a5266; user-select: none; }
+.win-side::before { position: absolute; top: 0; left: 0; content: "|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A|\A"; }
+.win-body { flex: 1; min-width: 0; padding: 10px 16px 14px; }
+
+/* minimized: a floating window over the wallpaper */
+html.win-min body, html.win-closed body { overflow: hidden; }
+html.win-min .win {
+  position: fixed; z-index: 5; min-height: 0; min-width: 300px;
+  background: rgba(5, 6, 8, 0.9); box-shadow: 0 18px 60px rgba(0, 0, 0, 0.65);
+  resize: both; overflow: hidden;
+}
+html.win-min .win-bar { cursor: move; }
+html.win-min .win-body { overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #2a3a48 transparent; }
+
+/* closed: just the wallpaper and a button in the corner */
+html.win-closed .win { display: none; }
+.win-dock {
+  display: none; position: fixed; z-index: 6; left: 16px; bottom: 14px;
+  font: inherit; color: #8fb8d8; background: rgba(5, 6, 8, 0.75); border: 1px solid #22313d; padding: 4px 10px;
+  cursor: url("/cursor-pointer.svg") 6 1, pointer;
+}
+html.win-closed .win-dock { display: block; }
+.win-dock::after { content: "_"; animation: win-blink 1s steps(1) infinite; }
+.win-dock:hover, .win-dock:focus-visible { background: #cfe9ff; color: #000; outline: none; }
+@keyframes win-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .win-dock::after { animation: none; } }
+
+/* the jellyfish wallpaper (new/jelly.js in wallpaper mode) */
+.wall { display: none; position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 70% at 50% 40%, #08101d 0%, #040810 55%, #02040a 100%); }
+html.win-min .wall, html.win-closed .wall { display: block; }
+.wall canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+.wall #bg { filter: blur(1.6px); opacity: 0.55; }
+.wall #glow { filter: blur(6px) saturate(1.4); opacity: 0.85; mix-blend-mode: screen; }
+html.win-min canvas.backdrop, html.win-closed canvas.backdrop { display: none; }

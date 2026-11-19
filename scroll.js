@@ -64,7 +64,11 @@
     location.href = url;
   }
 
-  function introBusy() { return document.documentElement.classList.contains('intro') || Date.now() < (window.__introQuietUntil || 0); }
+  // hands off while the intro runs, just after it, and while the window is minimized or closed (v2)
+  function introBusy() {
+    var c = document.documentElement.classList;
+    return c.contains('intro') || c.contains('win-min') || c.contains('win-closed') || Date.now() < (window.__introQuietUntil || 0);
+  }
 
   window.addEventListener('wheel', function (ev) {
     if (introBusy()) { lastWheel = Date.now(); gestureEdge = null; return; }
