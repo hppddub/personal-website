@@ -289,3 +289,14 @@ html:not(.win-max) .win-tip { display: none; }
 html.v2 #contact .label { color: #ffffff; }
 html.v2 #about p.bullet { color: #eaf3fa; }
 html.v2 #about p.bullet.sub { color: #b4d4ec; }
+
+/* the section nav always stays on one line: it scales down with the window's width (to 7.5px at the
+   smallest), and only on the narrowest screens scrolls sideways instead of wrapping */
+.win-body { container-type: inline-size; }
+html.v2 nav { display: flex; flex-wrap: nowrap; gap: 0 0.9ch; overflow-x: auto; scrollbar-width: none; font-size: clamp(7.5px, 2.64cqi, 14px); }
+html.v2 nav::-webkit-scrollbar { display: none; }
+html.v2 nav a { flex: none; margin: 0 0 4px; }
+/* the name banner scales the same way, so it is never cut off in a narrow window */
+html.v2 pre.banner { font-size: clamp(6px, 3.3cqi, 14px); }
+/* on phone-width screens the banner fills the top row, so the corner jellyfish would sit on the name */
+@media (max-width: 700px) { .win-tip { display: none !important; } }
