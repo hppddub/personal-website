@@ -8,7 +8,9 @@
 
   var FONT = 14, LINE = 18;
   var RAMP = ' .\'`:-~=+*%#';           // sparse -> dense
-  var SHADES = ['#131313', '#1a1a1a', '#232323']; // dim -> less dim
+  var SHADES = document.documentElement.classList.contains('v2')
+    ? ['#0b1319', '#101b24', '#16242f']  // ice, v2
+    : ['#131313', '#1a1a1a', '#232323']; // dim -> less dim
   var FPS = 12;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

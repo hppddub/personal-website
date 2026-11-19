@@ -64,7 +64,10 @@
     location.href = url;
   }
 
+  function introBusy() { return document.documentElement.classList.contains('intro') || Date.now() < (window.__introQuietUntil || 0); }
+
   window.addEventListener('wheel', function (ev) {
+    if (introBusy()) { lastWheel = Date.now(); gestureEdge = null; return; }
     var dy = ev.deltaMode === 1 ? ev.deltaY * 16 : ev.deltaY; // firefox reports lines
     if (!dy) return;
     var now = Date.now();
@@ -82,7 +85,7 @@
 
   // arrow keys: down/right go to the next section, up/left go back
   window.addEventListener('keydown', function (ev) {
-    if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+    if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey || introBusy()) return;
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) return;
     if (ev.key === 'ArrowDown' || ev.key === 'ArrowRight') {
       if (next) { ev.preventDefault(); go(next); }
@@ -93,6 +96,7 @@
 
   var touchY = null, touchEdge = null;
   window.addEventListener('touchstart', function (ev) {
+    if (introBusy()) { touchY = null; touchEdge = null; return; }
     touchY = ev.touches[0].clientY;
     touchEdge = atBottom() ? 'bottom' : atTop() ? 'top' : null;
   }, { passive: true });

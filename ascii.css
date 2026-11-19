@@ -53,7 +53,7 @@ nav a[aria-current="page"] {
   user-select: none;
 }
 .rule::before {
-  content: "+------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+  content: "+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
 }
 
 h1, h2 {
@@ -75,7 +75,7 @@ h1::before { content: "==[ "; color: #777; }
 #projects h1::before { content: "========[ "; }
 #contact h1::before { content: "==========[ "; }
 h1::after {
-  content: " ]======================================================================================================================================";
+  content: " ]========================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================";
   color: #777;
 }
 
@@ -165,3 +165,42 @@ canvas.backdrop {
 header { view-transition-name: header; }
 canvas.backdrop { view-transition-name: backdrop; }
 ::view-transition-group(*) { animation-duration: 0.18s; }
+
+/* ---------------------------------------------------------------------------
+   v2: stanleyzhou.vercel.app (stanleyzhou.cv keeps everything above as is).
+   full-width terminal in one ice hue, matching the intro montage.
+   ------------------------------------------------------------------------ */
+html.v2 { background: #050608; }
+html.v2 body { max-width: none; padding: 20px 28px; color: #8fb8d8; }
+html.v2 ::selection { background: #cfe9ff; color: #000; }
+html.v2 pre.banner .r0, html.v2 pre.banner .r1 { color: #e6f4ff; }
+html.v2 pre.banner .r2 { color: #bfe2ff; }
+html.v2 pre.banner .r3 { color: #93c3e6; }
+html.v2 pre.banner .r4 { color: #6a98bb; }
+html.v2 pre.banner .s { color: #1d2c38; }
+html.v2 nav a { color: #8fb8d8; }
+html.v2 nav a:hover, html.v2 nav a[aria-current="page"] { background: #cfe9ff; color: #000; }
+html.v2 .rule { color: #3a5266; }
+html.v2 h1, html.v2 h2 { color: #e6f4ff; }
+html.v2 h1::before, html.v2 h1::after, html.v2 h2::before, html.v2 p.bullet::before { color: #5e7f99; }
+html.v2 .block::before, html.v2 .education::before, html.v2 .experience::before, html.v2 .project::before { color: #3a5266; }
+html.v2 .date { color: #6a8ba5; }
+html.v2 a { color: #e6f4ff; }
+html.v2 a:visited { color: #b5d6ef; }
+html.v2 a:hover { background: #cfe9ff; color: #000; }
+html.v2 .next-hint, html.v2 footer { color: #3a5266; }
+html.v2 footer { white-space: normal; }
+html.v2 footer a.replay { color: #5e7f99; }
+
+/* the intro (v2 home page only): the page stays laid out underneath, hidden, until the montage lands on it */
+html.intro { overflow: hidden; }
+html.intro body > *:not(.intro-ui) { opacity: var(--intro-o, 0); }
+.intro-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 19; pointer-events: none; display: block; }
+.intro-scroll { position: fixed; inset: 0; z-index: 20; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; outline: none; }
+.intro-scroll::-webkit-scrollbar { display: none; }
+.intro-skip {
+  position: fixed; z-index: 21; top: 14px; right: 18px;
+  font: inherit; color: #5e7f99; background: transparent; border: 1px solid #22313d; padding: 3px 10px;
+}
+.intro-skip:hover, .intro-skip:focus-visible { background: #cfe9ff; color: #000; outline: none; }
+.intro-hint { position: fixed; z-index: 21; left: 50%; bottom: 18px; transform: translateX(-50%); color: #5e7f99; pointer-events: none; transition: opacity .4s; }

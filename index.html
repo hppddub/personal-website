@@ -6,6 +6,23 @@
   <title>stanley zhou</title>
   <link rel="stylesheet" href="/ascii.css" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script>
+    // stanleyzhou.cv keeps the original site; every other host (stanleyzhou.vercel.app, previews) gets v2
+    if (!/(^|\.)stanleyzhou\.cv$/.test(location.hostname)) document.documentElement.classList.add('v2');
+  </script>
+  <script>
+    // v2 home page: play the intro on a fresh visit (not when arriving from another page of the site)
+    (function () {
+      var d = document.documentElement, q = location.search, seen = false, internal = false;
+      if (!d.classList.contains('v2')) return;
+      try { seen = localStorage.getItem('sz-intro') === '1'; } catch (e) {}
+      try { internal = !!document.referrer && new URL(document.referrer).host === location.host; } catch (e) {}
+      if (/[?&]intro(=|&|$)/.test(q)) { seen = false; internal = false; }
+      if (seen || internal || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      d.classList.add('intro');
+      setTimeout(function () { if (!window.__introStarted) d.classList.remove('intro'); }, 5000);
+    })();
+  </script>
 </head>
 <body>
   <header>
@@ -31,9 +48,9 @@
     <section id="about">
       <h1>about</h1>
       <div class="block">
-        <p class="bullet">university of waterloo computer science '31</p>
-        <p class="bullet">interested in computer vision, world models, collective intelligence, and embodied ai</p>
-        <p class="bullet">currently working on:</p>
+        <p class="bullet">studying computer science at the university of waterloo</p>
+        <p class="bullet">currently interested in neural networks and foundational machine learning</p>
+        <p class="bullet">working on:</p>
         <p class="bullet sub">creating animal behavior-inspired data for ai collective intelligence training</p>
         <p class="bullet sub">developing a low latency cv model for drone detection</p>
       </div>
@@ -46,5 +63,6 @@
   <script src="/scroll.js"></script>
   <script src="/cursor.js"></script>
   <script src="/backdrop.js"></script>
+  <script src="/intro/intro.js" defer></script>
 </body>
 </html>
