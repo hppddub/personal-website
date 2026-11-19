@@ -264,3 +264,28 @@ html.win-min .wall, html.win-closed .wall { display: block; }
 .wall #bg { filter: blur(1.6px); opacity: 0.55; }
 .wall #glow { filter: blur(6px) saturate(1.4); opacity: 0.85; mix-blend-mode: screen; }
 html.win-min canvas.backdrop, html.win-closed canvas.backdrop { display: none; }
+
+/* status bar: the scroll hint and the last-updated line, always in view at the bottom of the window */
+.win-status { display: flex; flex: none; position: sticky; bottom: 1.35em; z-index: 2; background: #050608; }
+html.win-max .win-foot { position: sticky; bottom: 0; z-index: 2; background: #050608; }
+html.win-min .win-status, html.win-min .win-foot { background: transparent; }
+.win-status-in {
+  flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 3ch;
+  padding: 6px 16px 4px; border-top: 1px dashed #1d2a35; transition: opacity 0.14s ease;
+}
+.win-status-in.win-fade { opacity: 0; }
+.win-status-in .next-hint, .win-status-in footer { margin: 0; }
+
+/* the little jellyfish pointing at [_] (until it has been used once) */
+.win-tip { position: absolute; z-index: 3; display: flex; align-items: flex-start; pointer-events: none; user-select: none; }
+.win-tip pre { margin: 0; font-size: 10px; line-height: 1.15; }
+.win-tip-arrow { color: #5e7f99; }
+.win-tip-jelly { color: #bfe2ff; animation: win-bob 1.8s ease-in-out infinite; }
+@keyframes win-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { .win-tip-jelly { animation: none; } }
+html:not(.win-max) .win-tip, html.win-tried .win-tip { display: none; }
+
+/* contrast: labels and the about lines read in near-white, with the ice kept for markers and detail */
+html.v2 #contact .label { color: #ffffff; }
+html.v2 #about p.bullet { color: #eaf3fa; }
+html.v2 #about p.bullet.sub { color: #b4d4ec; }

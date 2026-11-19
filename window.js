@@ -31,14 +31,49 @@
   bar.append(el('span', 'win-edge', '+-[ '), title, el('span', 'win-edge', ' ]'), el('span', 'win-fill'), bMin, bMax, bX, el('span', 'win-edge', '-+'));
   var mid = el('div', 'win-mid'), body = el('div', 'win-body');
   mid.append(el('span', 'win-side'), body, el('span', 'win-side'));
+  // status bar pinned to the bottom of the window: the scroll hint and the last-updated line
+  var status = el('div', 'win-status'), statusIn = el('div', 'win-status-in');
+  status.append(el('span', 'win-side'), statusIn, el('span', 'win-side'));
   var foot = el('div', 'win-foot');
   foot.append(el('span', 'win-edge', '+'), el('span', 'win-fill'), el('span', 'win-edge', '+'));
-  win.append(bar, mid, foot);
+  win.append(bar, mid, status, foot);
+  function dockStatus() {
+    var hint = body.querySelector('.next-hint'), f = body.querySelector('footer');
+    statusIn.replaceChildren();
+    if (hint) statusIn.appendChild(hint);
+    if (f) statusIn.appendChild(f);
+  }
 
   var kids = Array.prototype.slice.call(document.body.children).filter(function (n) {
     return n.tagName !== 'SCRIPT' && !n.classList.contains('backdrop') && !n.classList.contains('intro-ui');
   });
   kids.forEach(function (n) { body.appendChild(n); });
+  dockStatus();
+
+  // a little jellyfish under the corner, pointing up at [_], until the visitor has tried it once
+  // the arrow stays put under [_]; the jellyfish beside it bobs (css), wiggles and blinks (frames below)
+  var ARROW = ['       ^', '       |', "  -----'", ' try me'];
+  var FACE = ['( ^_^ )', '( ^_^ )', '( ^_^ )', '( -_- )'];
+  var LEGS = [' )/)/(', ' (\\(\\)'];
+  var tip = el('div', 'win-tip'), jelly = el('pre', 'win-tip-jelly'), arrow = el('pre', 'win-tip-arrow'), tipFrame = 0;
+  tip.setAttribute('aria-hidden', 'true'); arrow.textContent = ARROW.join('\n');
+  function drawJelly() { jelly.textContent = ['', ' .-"-.', FACE[tipFrame % FACE.length], LEGS[tipFrame % 2]].join('\n'); }
+  drawJelly();
+  tip.append(jelly, arrow); win.appendChild(tip);
+  function tried() { try { return localStorage.getItem('sz-win-tried') === '1'; } catch (e) { return false; } }
+  if (tried()) root.classList.add('win-tried');
+  function placeTip() {
+    if (st.s !== 'max' || root.classList.contains('win-tried')) return;
+    var w = win.getBoundingClientRect(), b = bMin.getBoundingClientRect(), cw = arrow.getBoundingClientRect().width / ARROW[0].length;
+    tip.style.right = (w.right - (b.left + b.width / 2) - cw / 2) + 'px';
+    tip.style.top = (b.bottom - w.top + 1) + 'px';
+  }
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(function () {
+    if (st.s !== 'max' || root.classList.contains('win-tried')) return;
+    tipFrame = (tipFrame + 1) % 8; drawJelly();
+  }, 450);
+  addEventListener('resize', placeTip);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeTip);
   var firstScript = document.body.querySelector('script');
   document.body.insertBefore(win, firstScript);
 
@@ -79,10 +114,15 @@
       win.style.left = win.style.top = win.style.width = win.style.height = '';
     }
     if (focus) (st.s === 'closed' ? dock : st.s === 'min' ? bMax : bMin).focus({ preventScroll: true });
+    placeTip();
   }
   function set(s) { st.s = s; save(); apply(true); if (s === 'max') window.scrollTo(0, 0); }
 
-  bMin.addEventListener('click', function () { set('min'); });
+  bMin.addEventListener('click', function () {
+    try { localStorage.setItem('sz-win-tried', '1'); } catch (e) {}
+    root.classList.add('win-tried');
+    set('min');
+  });
   bMax.addEventListener('click', function () { set('max'); });
   // [x] remembers which state it closed from, so the corner button brings back the same one
   bX.addEventListener('click', function () { st.prev = st.s; set('closed'); });
@@ -122,7 +162,7 @@
   }
   function swap(url, push) {
     var token = ++swapping;
-    body.classList.add('win-fade');
+    body.classList.add('win-fade'); statusIn.classList.add('win-fade');
     var faded = new Promise(function (r) { setTimeout(r, 140); });
     var page = fetch(url, { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); });
     Promise.all([page, faded]).then(function (res) {
@@ -130,13 +170,14 @@
       var doc = new DOMParser().parseFromString(res[0], 'text/html'), nodes = pageContent(doc);
       if (!nodes.length) throw new Error('empty page');
       body.replaceChildren.apply(body, nodes.map(function (n) { return document.importNode(n, true); }));
+      dockStatus();
       if (push) history.pushState({ win: 1 }, '', url);
       document.title = doc.title;
       seg = location.pathname.replace(/\/+$/, '').split('/').pop() || 'about';
       title.textContent = '~/' + seg; dock.textContent = '[ ~/' + seg + ' ]';
       body.scrollTop = 0;
       if (window.__scrollNavRefresh) window.__scrollNavRefresh();
-      requestAnimationFrame(function () { body.classList.remove('win-fade'); });
+      requestAnimationFrame(function () { body.classList.remove('win-fade'); statusIn.classList.remove('win-fade'); });
     }).catch(function () { location.href = url; });
   }
   document.addEventListener('click', function (e) {
