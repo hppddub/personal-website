@@ -453,7 +453,7 @@
 
   function resize() {
     W = innerWidth; H = innerHeight;
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, WALL ? 1.5 : 2);
     FONT = W < 600 ? 8 : 11;
     LINE = Math.round(FONT * 1.1);
     [bgC, glowC, fgC].forEach(function (c) { c.width = W * dpr; c.height = H * dpr; });

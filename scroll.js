@@ -25,7 +25,10 @@
   if (HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
     var rules = document.createElement('script');
     rules.type = 'speculationrules';
-    rules.textContent = JSON.stringify({ prerender: [{ source: 'list', urls: others, eagerness: 'eager' }] });
+    rules.textContent = JSON.stringify({
+      prerender: [{ source: 'list', urls: others, eagerness: 'eager' }],
+      prefetch: [{ source: 'list', urls: others, eagerness: 'eager' }]
+    });
     document.head.appendChild(rules);
   } else {
     others.forEach(function (p) {

@@ -86,8 +86,10 @@
   }
 
   var last = 0;
+  var cls = document.documentElement.classList;
   function loop(now) {
-    if (now - last >= 1000 / FPS) { last = now; draw(); }
+    // hidden behind the jellyfish wallpaper while the window is minimized or closed: skip the work
+    if (now - last >= 1000 / FPS && !cls.contains('win-min') && !cls.contains('win-closed')) { last = now; draw(); }
     requestAnimationFrame(loop);
   }
 

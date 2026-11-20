@@ -1,6 +1,25 @@
 {
   "redirects": [
-    { "source": "/test", "destination": "/", "permanent": true },
-    { "source": "/test/:path*", "destination": "/:path*", "permanent": true }
+    {
+      "source": "/test",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/test/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*).(css|js|svg)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, stale-while-revalidate=600"
+        }
+      ]
+    }
   ]
 }

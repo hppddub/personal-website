@@ -122,6 +122,7 @@
     if (st.s !== 'max') ensureWall();
     window.__jellyPaused = st.s === 'max';
     if (st.s === 'min') {
+      warmPages();
       clampBox();
       win.style.left = st.x + 'px'; win.style.top = st.y + 'px'; win.style.width = st.w + 'px'; win.style.height = st.h + 'px';
     } else {
@@ -172,11 +173,23 @@
       return n.tagName !== 'SCRIPT' && !n.classList.contains('backdrop') && !n.classList.contains('intro-ui');
     });
   }
+  // the sections are kept in memory once the window is small, so a switch only costs the fade
+  var pages = {};
+  function keyOf(url) { var p = new URL(url, location.href).pathname.replace(/\/+$/, ''); return p || '/'; }
+  function getPage(url) {
+    var k = keyOf(url);
+    if (!pages[k]) pages[k] = fetch(k, { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+      .catch(function (e) { delete pages[k]; throw e; });
+    return pages[k];
+  }
+  function warmPages() {
+    Array.prototype.forEach.call(document.querySelectorAll('nav a:not([target])'), function (a) { if (SECTION.test(a.pathname)) getPage(a.href).catch(function () {}); });
+  }
   function swap(url, push) {
     var token = ++swapping;
     body.classList.add('win-fade'); statusIn.classList.add('win-fade');
-    var faded = new Promise(function (r) { setTimeout(r, 140); });
-    var page = fetch(url, { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); });
+    var faded = new Promise(function (r) { setTimeout(r, 120); });
+    var page = getPage(url);
     Promise.all([page, faded]).then(function (res) {
       if (token !== swapping) return;
       var doc = new DOMParser().parseFromString(res[0], 'text/html'), nodes = pageContent(doc);
