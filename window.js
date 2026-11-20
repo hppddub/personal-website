@@ -202,7 +202,8 @@
       title.textContent = '~/' + seg; dock.textContent = '[ ~/' + seg + ' ]';
       body.scrollTop = 0;
       if (window.__scrollNavRefresh) window.__scrollNavRefresh();
-      requestAnimationFrame(function () { body.classList.remove('win-fade'); statusIn.classList.remove('win-fade'); });
+      // a timer rather than requestAnimationFrame, which never fires in a background tab and would leave the window blank
+      setTimeout(function () { body.classList.remove('win-fade'); statusIn.classList.remove('win-fade'); }, 0);
     }).catch(function () { location.href = url; });
   }
   document.addEventListener('click', function (e) {
